@@ -1,0 +1,10 @@
+# Only mater-dei-app/ is deployed � keep build artifacts out of the repo root
+/index.html
+/index-*.js
+/index-*.css
+/manifest.webmanifest
+/icon.svg
+/icon-*.png
+/favicon.png
+/apple-touch-icon.png
+/class-*-handout.pdf

@@ -22,6 +22,23 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Inject Web3Forms access key
+        env:
+          WEB3FORMS_ACCESS_KEY: ${{ secrets.WEB3FORMS_ACCESS_KEY }}
+        run: |
+          if [ -z "$WEB3FORMS_ACCESS_KEY" ]; then
+            echo "::warning::WEB3FORMS_ACCESS_KEY secret is not set — Ask the Midwife form will not send email."
+            exit 0
+          fi
+          node -e "
+            const fs = require('fs');
+            const bundlePath = 'mater-dei-app/assets/index-Djyp0_i2.js';
+            let bundle = fs.readFileSync(bundlePath, 'utf8');
+            bundle = bundle.split('__WEB3FORMS_ACCESS_KEY__').join(process.env.WEB3FORMS_ACCESS_KEY);
+            fs.writeFileSync(bundlePath, bundle);
+          "
+
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
